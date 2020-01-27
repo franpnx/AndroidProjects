@@ -65,7 +65,7 @@ public class RecyAdapter extends RecyclerView.Adapter<RecyAdapter.ViewHolder> {
                 .centerInside()
                 .into(holder.thumbnail);
 
-        //implementar el onclick
+        //implementar el evento onclick
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

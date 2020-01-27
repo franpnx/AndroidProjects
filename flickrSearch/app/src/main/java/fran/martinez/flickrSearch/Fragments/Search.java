@@ -1,6 +1,10 @@
 package fran.martinez.flickrSearch.Fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -9,11 +13,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,6 +34,8 @@ import fran.martinez.flickrSearch.http.HttpHandler;
 import fran.martinez.flickrSearch.model.MainModel;
 import fran.martinez.flickrSearch.object.ListItem;
 import fran.martinez.flickrSearch.object.jsonContent;
+
+
 
 //Fragment que se encarga de hacer la búsqueda de imágenes
 public class Search extends Fragment {
@@ -61,33 +71,91 @@ public class Search extends Fragment {
         //views
         tx_search = getView().findViewById(R.id.tx_search);
         im_search = getView().findViewById(R.id.im_search);
+
+        //gestión del evento search del keyboard
+        tx_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                    //comprobar conectividad
+                    if(connectivity(getActivity())){
+
+                        //buscar imágenes
+                        search();
+
+                        // Ocultar el teclado
+                        hideKeyboard(getActivity());
+
+                    }else{
+                        Toast.makeText(getActivity(),getString(R.string.connec_failed), Toast.LENGTH_SHORT).show();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
         //gestión del evento onClick
         im_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                //obtiene datos introducidos por el usuario
-                request = tx_search.getText().toString();
+                //comprobar conectividad
+                if(connectivity(getActivity())){
 
+                    //buscar imágenes
+                    search();
 
-                if(request.equals("")){
-                    //si no se ha introducido ningún dato...
-                    Toast.makeText(getActivity(),"Por favor, introduzca datos de búsqueda",Toast.LENGTH_SHORT).show();
+                    // Ocultar el teclado
+                    hideKeyboard(getActivity());
 
+                }else{
+                    Toast.makeText(getActivity(),getString(R.string.connec_failed), Toast.LENGTH_SHORT).show();
                 }
-                    //realizar tarea asíncrona para descargar datos
-                    GetContent gc = new GetContent();
-                    URL = "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=1da668b4f8de3499fd19a1f1fff06fe3&text="+request+"&extras=owner_name&per_page=10&format=json&nojsoncallback=1";
-
-                    gc.execute(URL);
-
-
-
-
-
 
             }
         });
+    }
+
+    public boolean connectivity(Activity context){
+
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+
+    }
+
+    public void search(){
+
+        //obtiene datos introducidos por el usuario
+        request = tx_search.getText().toString();
+
+        if(request.equals("")){
+            //si no se ha introducido ningún dato...
+            Toast.makeText(getActivity(),getString(R.string.empty_field),Toast.LENGTH_SHORT).show();
+
+        }
+        //realizar tarea asíncrona para descargar datos
+        GetContent gc = new GetContent();
+        URL = "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key="+getString(R.string.flickr_key)+"&text="+request+"&extras=owner_name,description&format=json&nojsoncallback=1";
+
+        gc.execute(URL);
+
+    }
+
+    public void hideKeyboard(Activity context){
+
+        View view = context.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /**
@@ -102,7 +170,7 @@ public class Search extends Fragment {
             super.onPreExecute();
             // Mostrar progress dialog
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Cargando contenido...");
+            pDialog.setMessage(getString(R.string.async_task));
             pDialog.setCancelable(false);
             pDialog.show();
 
@@ -135,7 +203,7 @@ public class Search extends Fragment {
 
                             String imageUrl = "https://farm"+String.valueOf(photo.getFarm())+".staticflickr.com/"+photo.getServer()+"/"+photo.getId()+"_"+photo.getSecret()+".jpg";
 
-                            items.add(new ListItem(photo.getOwnername(),photo.getTitle(),imageUrl));
+                            items.add(new ListItem(photo.getOwnername(),photo.getTitle(),imageUrl,photo.getDescription().get_content()));
                         }
                     }
 

@@ -6,22 +6,22 @@ import java.util.ArrayList;
 public class jsonContent {
 
     photos photos;
-    String stat;
+
 
 
     public jsonContent.photos getPhotos() {
         return photos;
     }
 
-    public jsonContent(jsonContent.photos photos, String stat) {
+    public jsonContent(jsonContent.photos photos) {
         this.photos = photos;
-        this.stat = stat;
+
     }
 
     //clase interna
     public static class photos{
 
-        int page, pages, perpage,total;
+        int total;
         ArrayList<photo> photo;
 
         public int getTotal() {
@@ -32,10 +32,8 @@ public class jsonContent {
             return photo;
         }
 
-        public photos(int page, int pages, int perpage, int total, ArrayList<jsonContent.photo> photo) {
-            this.page = page;
-            this.pages = pages;
-            this.perpage = perpage;
+        public photos( int total, ArrayList<jsonContent.photo> photo) {
+
             this.total = total;
             this.photo = photo;
         }
@@ -44,20 +42,22 @@ public class jsonContent {
     //clase interna
     public static class photo{
 
-        int farm,isfriend,isfamily;
+        int farm;
         String id,owner,secret,server,title,ownername;
+        description description;
 
-        public photo(int farm, int isfriend, int isfamily, String id, String owner, String secret, String server, String title, String ownername) {
+        public photo(int farm, String id, String owner, String secret, String server, String title, String ownername, description desc) {
             this.farm = farm;
-            this.isfriend = isfriend;
-            this.isfamily = isfamily;
+
             this.id = id;
             this.owner = owner;
             this.secret = secret;
             this.server = server;
             this.title = title;
             this.ownername = ownername;
+            this.description = desc;
         }
+
 
         public int getFarm() {
             return farm;
@@ -81,6 +81,24 @@ public class jsonContent {
 
         public String getOwnername() {
             return ownername;
+        }
+
+        public description getDescription() {
+            return description;
+        }
+    }
+
+
+    public static class description{
+
+        String _content;
+
+        public description(String _content) {
+            this._content = _content;
+        }
+
+        public String get_content() {
+            return _content;
         }
     }
 }

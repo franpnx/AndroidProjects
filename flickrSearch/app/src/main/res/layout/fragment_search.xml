@@ -4,31 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:drawable/dialog_holo_light_frame"
     tools:context=".Fragments.Search">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingLeft="15dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp">
 
-        <ImageView
-            android:id="@+id/im_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/ic_arrowback"
-             />
 
         <EditText
             android:id="@+id/tx_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:ems="10"
-            android:hint="Search..."
-            android:inputType="textPersonName"
+            android:hint="@string/search"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
             android:textSize="14sp" />
 
         <ImageView
@@ -36,7 +32,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_search"
-             />
+            android:src="@drawable/ic_search" />
     </LinearLayout>
 </FrameLayout>

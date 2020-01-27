@@ -24,7 +24,7 @@ public class Details extends Fragment {
 
     private MainModel model;
     private ImageView image;
-    private TextView title, author;
+    private TextView title, author, description;
 
 
     @Override
@@ -45,6 +45,7 @@ public class Details extends Fragment {
         image = getView().findViewById(R.id.im_det_photo);
         author = getView().findViewById(R.id.tx_det_author);
         title = getView().findViewById(R.id.tx_det_title);
+        description = getView().findViewById(R.id.tx_desc);
 
         // observador
         final Observer<ListItem> observerDetails = new Observer<ListItem>() {
@@ -53,6 +54,7 @@ public class Details extends Fragment {
 
                 author.setText(listItem.getAuthor());
                 title.setText(listItem.getTitle());
+                description.setText(listItem.getDescription());
 
                 //añade una imagen con  Picasso dentro del imageView
                 Picasso.with(getActivity())

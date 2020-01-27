@@ -25,13 +25,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fr_search" >
 
+        <ImageView
+            android:id="@+id/im_error"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_error" />
+
         <TextView
             android:id="@+id/tx_noFound"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Escribe un texto para buscar..." />
+            android:text="@string/msg_search"
+            android:textSize="18sp" />
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

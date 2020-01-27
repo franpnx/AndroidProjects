@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,9 @@ public class Recycler extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
+        Log.e("FRAGMENT","onCreateView");
+
+
         return view;
     }
 
@@ -45,9 +49,7 @@ public class Recycler extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
-          //model
-        model = ViewModelProviders.of(getActivity()).get(MainModel.class);
+        Log.e("FRAGMENT","onActivityCreated");
 
         //inicializar componentes
         list = new ArrayList<>();
@@ -57,6 +59,9 @@ public class Recycler extends Fragment {
         //añadir adapter al recyclerView
         adapter = new RecyAdapter( getActivity(),list);
         recyclerView.setAdapter(adapter);
+
+        //model
+        model = ViewModelProviders.of(getActivity()).get(MainModel.class);
 
 
         // observador que mira si se ha actualizado la lista de fotos
@@ -79,7 +84,6 @@ public class Recycler extends Fragment {
 
         //añadir observador
         model.getPhotosList().observe(this,observer);
-
 
 
     }
