@@ -7,6 +7,7 @@ Para el correcto funcionamiento de la app, debe de solicitar su Api_Key desde la
 e insertarla en el campo ***flickr_key*** situado dentro del fichero [strings.xml](https://github.com/franpnx/AndroidProjects/blob/master/flickrSearch/app/src/main/res/values/strings.xml)
 
 ## Tecnologías:
+* Java
 * Gson lybrary
 * Picasso lybrary
 * Flickr API REST
